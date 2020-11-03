@@ -121,8 +121,16 @@
               "devServerTarget": "Calvalry-Regiment-Website:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
-  "defaultProject": "Calvalry-Regiment-Website"
+    }
+  },
+  "defaultProject": "Calvalry-Regiment-Website",
+  "cli": {
+    "analytics": false
+  }
 }

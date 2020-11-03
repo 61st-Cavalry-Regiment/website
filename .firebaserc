@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "cavalryregiment61st-dev": {
+      "hosting": {
+        "Calvalry-Regiment-Website": [
+          "cavalryregiment61st-dev"
+        ]
+      }
+    }
+  }
+}
