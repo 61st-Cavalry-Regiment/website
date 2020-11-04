@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+$body-bg: #212121;
+$body-color: white;
 html {
   ::-webkit-scrollbar {
     display: none !important;
@@ -6,10 +8,6 @@ html {
   scrollbar-width: none !important;
 }
 
-body {
-  background-color: #212121 !important;
-  color: white !important;
-}
 a {
   text-decoration: none;
   cursor: pointer;
@@ -27,3 +25,5 @@ a {
 .break {
   margin: 25px;
 }
+
+@import '../node_modules/bootstrap/scss/bootstrap.scss'

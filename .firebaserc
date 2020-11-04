@@ -1,9 +1,9 @@
 {
   "targets": {
-    "cavalryregiment61st-dev": {
+    "new-web-858be": {
       "hosting": {
         "Calvalry-Regiment-Website": [
-          "cavalryregiment61st-dev"
+          "new-web-858be"
         ]
       }
     }

@@ -28,10 +28,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "C:\\Users\\jdoxl\\Documents\\Projects\\Website 2 Electric Boogaloo\\Calvalry-Regiment-Website\\node_modules\\bootstrap\\scss\\bootstrap.scss"
+              "src/styles.scss"
             ],
             "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
