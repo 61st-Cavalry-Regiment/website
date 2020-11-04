@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+  ::-webkit-scrollbar {
+    display: none !important;
+  }
+  scrollbar-width: none !important;
+}
+
+body {
+  background-color: #212121 !important;
+  color: white !important;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.container {
+  overflow-y: scroll;
+  height: 100%;
+  top: 70px;
+  position: relative;
+  scrollbar-width: none !important;
+  padding-top: 10px;
+}
+
+.break {
+  margin: 25px;
+}

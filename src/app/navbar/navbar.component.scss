@@ -1,0 +1,34 @@
+.nav23 {
+  .active {
+    color: white;
+    font-weight: 600;
+  }
+
+  a {
+    padding-right: 20px;
+    color: #a9a9a9;
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  .filler {
+    flex: 1 1 auto;
+  }
+
+  img {
+    max-height: 70px;
+  }
+
+  background-color: #191919;
+  color: #a9a9a9;
+  font-size: 17px;
+  height: 70px;
+  padding: 0 3%;
+  position: fixed;
+  align-items: center;
+  z-index: 3;
+  width: 100%;
+  display: flex;
+}
