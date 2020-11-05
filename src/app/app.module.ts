@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { RecruitmentComponent } from './recruitment/recruitment.component';
 
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
+import { AngularFireAnalyticsModule, ScreenTrackingService } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
@@ -42,7 +42,7 @@ import { ShopsComponent } from './shops/shops.component';
     AngularFirestoreModule,
     AngularFireStorageModule,
   ],
-  providers: [{ provide: BUCKET, useValue: '61st-web' }],
+  providers: [ScreenTrackingService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
