@@ -10,7 +10,7 @@ import { RecruitmentComponent } from './recruitment/recruitment.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAnalyticsModule, ScreenTrackingService } from '@angular/fire/analytics';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
 import { BilletsComponent } from './billets/billets.component';
 import { NotFoundComponent } from './not-found/not-found.component';
