@@ -10,14 +10,27 @@
     >
       <ol class="carousel-indicators">
         <li
+          *ngFor="let img of photos; index as i; first as first"
+          data-target="#carouselExampleIndicators"
+          [attr.data-slide-to]="i"
+          [ngClass]="{ active: first }"
+        ></li>
+        <!-- <li
           data-target="#carouselExampleIndicators"
           data-slide-to="0"
           class="active"
         ></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li> -->
       </ol>
       <div class="carousel-inner">
-        <div class="carousel-item active">
+        <div
+          *ngFor="let item of photos; first as isFirst"
+          class="carousel carousel-item"
+          [ngClass]="{ active: isFirst }"
+        >
+          <img src="{{ item }}" alt="" class="d-block w-100" />
+        </div>
+        <!-- <div class="carousel-item active">
           <img
             src="https://cdn.discordapp.com/attachments/705260260348133437/751966391338270791/20200905165356_1.jpg"
             class="d-block w-100"
@@ -30,7 +43,7 @@
             class="d-block w-100"
             alt="..."
           />
-        </div>
+        </div> -->
       </div>
       <a
         class="carousel-control-prev"
@@ -55,13 +68,13 @@
   <div class="row justify-content-center my-3 mb-5">
     <h1>Latest Operation:</h1>
     <div class="w-100"></div>
-    <iframe
-      width="560"
-      height="315"
-      src="https://www.youtube-nocookie.com/embed/iZBIeM2zE-I"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/iZBIeM2zE-I"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
   </div>
 </div>
