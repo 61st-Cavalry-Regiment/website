@@ -1,1 +1,33 @@
-<p>shops works!</p>
+<div class="container">
+    <p>{{(auth.user|async)?.uid | json}}</p>
+    <div class="row justify-content-center" *ngIf="(auth.user$|async).roles.includes('admin')">
+        <h1>Admin</h1>
+    </div>
+    <div class="row justify-content-center" *ngIf="(auth.user$|async).roles.includes('website')">
+        <h1>Website</h1>
+        <table class="table">
+            <thead>
+                <th scope="col">Position</th>
+                <th scope="col">Image</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>something</td>
+                    <td>button</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>something</td>
+                    <td>button</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button (click)="test()">test</button>
+    <button (click)="generate()">generate code</button>
+    <ul>
+        <li *ngFor="let code of codes">{{code.code}}</li>
+    </ul>
+</div>

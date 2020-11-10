@@ -7,16 +7,21 @@
     </div>
   </div>
   <div class="row justify-content-center mb-5">
-    <form action="">
+    <form>
       <div class="form-group">
         <label for="usernameInput">Username</label>
-        <input type="text" class="form-control">
+        <input type="text" #email class="form-control">
       </div>
       <div class="form-group">
         <label for="passwordIput">Password</label>
-        <input type="password" name="" id="InputPassword1" class="form-control">
+        <input type="password" name="" #pw class="form-control">
       </div>
-      <button type="submit" class="btn btn-primary w-100">Login</button>
+      <button class="btn btn-primary w-100" type="button" (click)="login(email.value, pw.value)">Login</button>
+      <div class="form-group">
+        <label for="codeInput">Code</label>
+        <input type="text" class="form-control" #code>
+      </div>
+      <button class="btn btn-primary w-100" type="button" (click)="register(email.value, pw.value, code.value)">Register</button>
     </form>
   </div>
 

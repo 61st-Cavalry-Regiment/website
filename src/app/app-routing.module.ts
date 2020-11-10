@@ -1,15 +1,16 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { BilletsComponent } from './billets/billets.component';
-import { CalenderComponent } from './calender/calender.component';
-import { TestGuard } from './guards/test.guard';
-import { MainComponent } from './main/main.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { QRDComponent } from './qrd/qrd.component';
-import { RecruitmentComponent } from './recruitment/recruitment.component';
-import { ShopsLoginComponent } from './shops-login/shops-login.component';
-import { ShopsComponent } from './shops/shops.component';
-import { UnitPhotosComponent } from './unit-photos/unit-photos.component';
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
+import { BilletsComponent } from './billets/billets.component'
+import { CalenderComponent } from './calender/calender.component'
+import { AuthGuard } from './guards/auth/auth.guard'
+import { TestGuard } from './guards/test.guard'
+import { MainComponent } from './main/main.component'
+import { NotFoundComponent } from './not-found/not-found.component'
+import { QRDComponent } from './qrd/qrd.component'
+import { RecruitmentComponent } from './recruitment/recruitment.component'
+import { ShopsLoginComponent } from './shops-login/shops-login.component'
+import { ShopsComponent } from './shops/shops.component'
+import { UnitPhotosComponent } from './unit-photos/unit-photos.component'
 
 const routes: Routes = [
   {
@@ -37,12 +38,12 @@ const routes: Routes = [
     component: QRDComponent,
   },
   { path: 'login', component: ShopsLoginComponent },
-  { path: 'shops', component: ShopsComponent, canActivate: [TestGuard] },
+  { path: 'shops', component: ShopsComponent, canActivate: [AuthGuard] },
   {
     path: '**',
     component: NotFoundComponent,
   },
-];
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
