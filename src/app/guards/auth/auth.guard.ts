@@ -8,6 +8,7 @@ import {
   Router,
 } from '@angular/router'
 import { Observable, of } from 'rxjs'
+import { map, take, tap } from 'rxjs/operators'
 import { AuthService } from 'src/app/services/auth/auth.service'
 
 @Injectable({
@@ -29,19 +30,14 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     const url: string = state.url
-    return this.checkLogin(url)
-  }
-
-  checkLogin(url: string): true | UrlTree {
-    let toReturn
-    this.auth.onAuthStateChanged((user) => {
-      if (user) {
-        toReturn = true
-      } else {
-        this.authService.redirectUrl = url
-        toReturn = this.router.parseUrl('/login')
-      }
-    })
-    return toReturn
+    return this.authService.isLoggedIn.pipe(
+      tap((isLoggedIn) => {
+        if (!isLoggedIn) {
+          console.log('access denied')
+          this.authService.redirectUrl = url
+          this.router.navigate(['/login'])
+        }
+      })
+    )
   }
 }

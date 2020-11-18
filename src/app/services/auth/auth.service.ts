@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { Router } from '@angular/router'
 import { Observable, of, Subscription } from 'rxjs'
 import { User } from 'src/app/models/user.model'
-import { map, switchMap } from 'rxjs/operators'
+import { map, switchMap, tap } from 'rxjs/operators'
 import * as firebase from 'firebase'
 import { Code, Codes } from 'src/app/models/codes.model'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,46 +14,32 @@ import { trace } from '@angular/fire/performance'
   providedIn: 'root',
 })
 export class AuthService {
-  user$: Observable<User> = of(null)
+  user$: Observable<User>
   redirectUrl: string
-  isLoggedIn: boolean
-  user: Subscription | null
 
   constructor(
     private auth: AngularFireAuth,
     private fireStore: AngularFirestore,
     private router: Router
   ) {
-    this.user = auth.authState
-      .pipe(
-        trace('auth'),
-        map((u) => !!u)
-      )
-      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn))
-    this.auth.onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user)
-        this.isLoggedIn = true
-        this.user$ = this.fireStore
-          .doc<User>(`users/${user.uid}`)
-          .valueChanges()
-        console.log(this.isLoggedIn)
-        this.user$.subscribe(console.log)
-      } else {
-        this.isLoggedIn = false
-      }
-    })
-    this.user$.subscribe(console.log)
+    this.user$ = this.auth.authState.pipe(
+      switchMap((user) => {
+        if (user) {
+          return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
+        } else {
+          return of(null)
+        }
+      })
+    )
   }
 
   async signOut() {
     await this.auth.signOut()
-    this.isLoggedIn = false
+    this.user$ = of(null)
     return this.router.navigate(['/'])
   }
 
-  signIn(email: string, password: string) {
-    this.isLoggedIn = true
+  async signIn(email: string, password: string) {
     // this.auth
     //   .setPersistence(this.auth.)
     //   .then(() => {
@@ -64,7 +50,16 @@ export class AuthService {
     //     let errorMessage = err.message
     //     console.error(errorCode, errorMessage)
     //   })
-    this.auth.signInWithEmailAndPassword(email, password)
+    await this.auth.signInWithEmailAndPassword(email, password)
+    this.user$ = this.auth.authState.pipe(
+      switchMap((user) => {
+        if (user) {
+          return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
+        } else {
+          return of(null)
+        }
+      })
+    )
     return this.router.navigateByUrl(this.redirectUrl)
   }
 
@@ -89,5 +84,12 @@ export class AuthService {
         createdBy: user.firstInitial + '.' + user.lastName,
       })
     })
+  }
+
+  get isLoggedIn(): Observable<boolean> {
+    return this.user$.pipe(
+      map((user) => !!user),
+      tap((isLoggedIn) => isLoggedIn)
+    )
   }
 }

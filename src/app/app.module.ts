@@ -24,7 +24,8 @@ import { UnitPhotosComponent } from './unit-photos/unit-photos.component'
 import { QRDComponent } from './qrd/qrd.component'
 import { ShopsLoginComponent } from './shops-login/shops-login.component'
 import { ShopsComponent } from './shops/shops.component'
-import { AuthService } from './services/auth/auth.service'
+import { AuthService } from './services/auth/auth.service';
+import { SafePipe } from './pipes/safe.pipe'
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { AuthService } from './services/auth/auth.service'
     QRDComponent,
     ShopsLoginComponent,
     ShopsComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
