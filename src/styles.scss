@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 $body-bg: #212121;
 $body-color: white;
+$modal-content-bg: #212121;
+$modal-header-border-color: #191919;
+$modal-footer-border-color: #191919;
+
 html {
   ::-webkit-scrollbar {
     display: none !important;
@@ -26,4 +30,8 @@ a {
   margin: 25px;
 }
 
-@import '../node_modules/bootstrap/scss/bootstrap.scss'
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+
+
+

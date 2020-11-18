@@ -17,11 +17,17 @@
     <h1>This week in the 61st:</h1>
     <div class="w-100 my-2"></div>
     <div class="d-flex align-items-center">
-      <img src="{{ imgUrl | async }}" alt="" class="mx-auto" />
+      <div class="edit-img  ">
+        <img src="{{ imgUrl | async }}" alt="" class="mx-auto" />
+        <div class="edit" *ngIf="isLoggedIn|async"><button data-toggle="modal" data-target="#changeImg" data-whatever="img_1" ><i class="material-icons">create</i></button></div>
+      </div>
     </div>
     <div class="w-100 my-3"></div>
     <div class="d-flex align-items-center">
-      <img [src]="imgUrl2 | async" alt="" class="mx-auto" />
+      <div class="edit-img">
+        <img [src]="imgUrl2 | async" alt="" class="mx-auto" />
+        <div class="edit" *ngIf="isLoggedIn|async"><button data-toggle="modal" data-target="#changeImg" data-whatever="img_2" ><i class="material-icons">create</i></button></div>
+      </div>
     </div>
     <div class="w-100 my-1"></div>
     <div class="text-center note">
@@ -66,4 +72,28 @@
       <a href="https://discord.gg/R6mG2JKNxt">discord</a>!
     </p>
   </div>
+
+<!-- Modal -->
+<div class="modal fade" id="changeImg" tabindex="-1" aria-labelledby="changeImgLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeImgLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Something about changing images
+        </p>
+        <input type="file" name="" id="file-selector" accept=".jpg" (change)="fileSelector($event)" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save" (click)="uploadFile($event)">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>

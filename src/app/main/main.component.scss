@@ -29,3 +29,30 @@ a {
         color: #007bff;
     }
 }
+
+.edit-img:hover .edit{
+  opacity: 1;
+  transition: all 0.5s;
+}
+
+.edit-img {
+  position: relative;
+}
+
+.edit {
+  padding: 8px 10.5px 7.5px 10.5px;
+  position: absolute;
+  top: -.5px;
+  right: 27.5px;
+  display: block;
+  opacity: 0;
+  z-index: 5;
+  background-color: rgba($color: #191919, $alpha: .5);
+  border-radius: 3px;
+  button {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: white;
+  }
+}

@@ -13,6 +13,7 @@ import {
   AngularFireAnalyticsModule,
   ScreenTrackingService,
 } from '@angular/fire/analytics'
+import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFirestoreModule } from '@angular/fire/firestore'
 import { AngularFireStorageModule } from '@angular/fire/storage'
 import { environment } from 'src/environments/environment'
@@ -23,6 +24,8 @@ import { UnitPhotosComponent } from './unit-photos/unit-photos.component'
 import { QRDComponent } from './qrd/qrd.component'
 import { ShopsLoginComponent } from './shops-login/shops-login.component'
 import { ShopsComponent } from './shops/shops.component'
+import { AuthService } from './services/auth/auth.service';
+import { SafePipe } from './pipes/safe.pipe'
 
 @NgModule({
   declarations: [
@@ -37,17 +40,19 @@ import { ShopsComponent } from './shops/shops.component'
     QRDComponent,
     ShopsLoginComponent,
     ShopsComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
     AngularFireAnalyticsModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
   ],
-  providers: [ScreenTrackingService],
+  providers: [ScreenTrackingService, AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

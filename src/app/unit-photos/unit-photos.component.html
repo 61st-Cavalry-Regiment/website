@@ -28,22 +28,8 @@
           class="carousel carousel-item"
           [ngClass]="{ active: isFirst }"
         >
-          <img src="{{ item }}" alt="" class="d-block w-100" />
+          <img src="{{ item |async}}" alt="" class="d-block w-100" />
         </div>
-        <!-- <div class="carousel-item active">
-          <img
-            src="https://cdn.discordapp.com/attachments/705260260348133437/751966391338270791/20200905165356_1.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div class="carousel-item">
-          <img
-            src="https://cdn.discordapp.com/attachments/705260260348133437/751966396174303262/20200905164311_1.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div> -->
       </div>
       <a
         class="carousel-control-prev"
@@ -70,9 +56,9 @@
     <div class="w-100"></div>
     <div class="embed-responsive embed-responsive-16by9">
       <iframe
-        src="https://www.youtube-nocookie.com/embed/iZBIeM2zE-I"
+        [src]="ytVid|safe"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
       ></iframe>
     </div>
