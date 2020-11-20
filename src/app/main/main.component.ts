@@ -13,13 +13,14 @@ export class MainComponent implements OnInit {
   imgUrl2: Observable<string | null>
   imgPending: File
   isLoggedIn: Observable<boolean>
+  modList: Observable<string>
 
   constructor(private storage: AngularFireStorage, public auth: AuthService) {
-    console.log(auth.isLoggedIn)
     this.isLoggedIn = auth.isLoggedIn
     const ref = this.storage.ref('home/img_1.jpg')
     this.imgUrl = ref.getDownloadURL()
     this.imgUrl2 = this.storage.ref('home/img_2.jpg').getDownloadURL()
+    this.modList = this.storage.ref('home/Modlist.html').getDownloadURL()
   }
 
   ngOnInit(): void {
@@ -48,11 +49,19 @@ export class MainComponent implements OnInit {
       ['img_1', 'imgUrl'],
       ['img_2', 'imgUrl2'],
     ])
+    let meta = {
+      customMetadata: {
+        author: '',
+      },
+    }
+    this.auth.user$.subscribe((user) => {
+      meta.customMetadata.author = `${user.firstInitial}.${user.lastName}`
+    })
     console.log(this.imgPending)
     const image = $(event.target).data('whatever')
     const filePath = 'home/' + image + '.jpg'
     const fileRef = this.storage.ref(filePath)
-    const task = this.storage.upload(filePath, this.imgPending)
+    const task = this.storage.upload(filePath, this.imgPending, meta)
     task
       .snapshotChanges()
       .pipe(

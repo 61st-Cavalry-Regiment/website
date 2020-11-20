@@ -7,7 +7,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "pretestDeploy": "ng build",
+    "testDeploy": "firebase hosting:channel:deploy test",
+    "predeploy": "ng build --prod",
+    "deploy": "firebase deploy --only hosting"
   },
   "private": true,
   "dependencies": {

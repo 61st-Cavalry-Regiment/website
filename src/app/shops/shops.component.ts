@@ -93,11 +93,19 @@ export class ShopsComponent implements OnInit {
       ['img_4', 3],
       ['img_5', 4],
     ])
+    let meta = {
+      customMetadata: {
+        author: '',
+      },
+    }
+    this.auth.user$.subscribe((user) => {
+      meta.customMetadata.author = `${user.firstInitial}.${user.lastName}`
+    })
     console.log(this.imgPending)
     const image = $(event.target).data('image')
     const filePath = 'unit-photos/' + image + '.jpg'
     const fileRef = this.storage.ref(filePath)
-    const task = this.storage.upload(filePath, this.imgPending)
+    const task = this.storage.upload(filePath, this.imgPending, meta)
     task
       .snapshotChanges()
       .pipe(
