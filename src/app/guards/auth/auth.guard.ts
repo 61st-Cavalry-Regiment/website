@@ -6,38 +6,105 @@ import {
   RouterStateSnapshot,
   UrlTree,
   Router,
+  CanActivateChild,
 } from '@angular/router'
 import { Observable, of } from 'rxjs'
-import { map, take, tap } from 'rxjs/operators'
+import { map, switchMap, take, tap } from 'rxjs/operators'
 import { AuthService } from 'src/app/services/auth/auth.service'
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
+  private login: UrlTree
+  private dash: UrlTree
   constructor(
     private authService: AuthService,
     private router: Router,
     private auth: AngularFireAuth
-  ) {}
+  ) {
+    this.login = this.router.parseUrl('login')
+    this.dash = this.router.parseUrl('shops')
+  }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
+    this.authService.isLoggedIn.subscribe(console.log)
     const url: string = state.url
     return this.authService.isLoggedIn.pipe(
-      tap((isLoggedIn) => {
-        if (!isLoggedIn) {
-          console.log('access denied')
+      map((isLoggedIn) => {
+        console.log('Guard start')
+        console.log('Loggin State:', isLoggedIn)
+        if (isLoggedIn) {
+          if (route.routeConfig.path === 'login') {
+            console.log('Logged in, path is login page')
+            return this.router.navigateByUrl('/shops')
+          }
+          console.log('Guard Passed')
+          return true
+        } else {
+          if (route.routeConfig.path === 'login') {
+            console.log('Guard Passed to login page')
+            return true
+          }
+          console.log(
+            'Guard failed, redirecting to login page. Redirect url:',
+            url
+          )
           this.authService.redirectUrl = url
-          this.router.navigate(['/login'])
+          return this.router.navigateByUrl('/login')
         }
       })
     )
+  }
+
+  canActivateChild(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): any {
+    if (route.routeConfig.path === 'home') {
+      return true
+    }
+    return this.authService.user$.pipe(
+      map((user) => {
+        console.log(user.roles)
+
+        console.log('Child Guard Start')
+        if (user.roles[route.routeConfig.path]) {
+          console.log('Guard Passed')
+          return true
+        }
+        console.log('Guard Failed')
+        return this.router.navigateByUrl(
+          this.parseUrl(
+            state.url,
+            `../not-authorized/${route.routeConfig.path}`
+          )
+        )
+      })
+    )
+  }
+
+  private parseUrl(url: string, redirectTo: string) {
+    const urlTokens = url.split('/')
+    const redirectToTokens = redirectTo.split('/')
+
+    let token = redirectToTokens.shift()
+
+    while (token) {
+      if (token !== '.' && token !== '..') {
+        redirectToTokens.unshift(token)
+        break
+      }
+
+      if (token === '..') {
+        urlTokens.pop()
+      }
+
+      token = redirectToTokens.shift()
+    }
+
+    urlTokens.push(...redirectToTokens)
+
+    return urlTokens.join('/')
   }
 }

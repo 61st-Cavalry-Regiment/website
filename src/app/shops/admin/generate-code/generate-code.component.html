@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Generate Code</h2>
+<mat-dialog-content class="mat-typography">
+    <h3>Provide Access to:</h3>
+    <ul [formGroup]="form">
+        <li>
+            <mat-checkbox formControlName='admin'>Admin</mat-checkbox>
+        </li>
+        <li>
+            <mat-checkbox formControlName='website'>Website</mat-checkbox>
+        </li>
+    </ul>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="form.value" cdkFocusInitial>Generate</button>
+</mat-dialog-actions>

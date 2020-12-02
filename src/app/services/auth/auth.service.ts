@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Router } from '@angular/router'
-import { Observable, of, Subscription } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { User } from 'src/app/models/user.model'
 import { map, switchMap, tap } from 'rxjs/operators'
-import * as firebase from 'firebase'
-import { Code, Codes } from 'src/app/models/codes.model'
+import { Code } from 'src/app/models/codes.model'
 import { v4 as uuidv4 } from 'uuid'
-import { trace } from '@angular/fire/performance'
+import * as firebase from 'firebase/app'
+import { roles } from 'src/app/models/roles.model'
 
 @Injectable({
   providedIn: 'root',
@@ -22,74 +22,54 @@ export class AuthService {
     private fireStore: AngularFirestore,
     private router: Router
   ) {
-    this.user$ = this.auth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
-        } else {
-          return of(null)
-        }
-      })
-    )
+    this.user$ = this.getUser()
   }
 
   async signOut() {
     await this.auth.signOut()
-    this.user$ = of(null)
-    return this.router.navigate(['/'])
+    this.user$ = this.getUser()
+    return this.router.navigateByUrl('/')
   }
 
-  async signIn(email: string, password: string) {
-    // this.auth
-    //   .setPersistence(this.auth.)
-    //   .then(() => {
-    //     return this.auth.signInWithEmailAndPassword(email, password)
-    //   })
-    //   .catch((err) => {
-    //     let errorCode = err.code
-    //     let errorMessage = err.message
-    //     console.error(errorCode, errorMessage)
-    //   })
+  async signIn(email: string, password: string, remember: boolean = false) {
     await this.auth.signInWithEmailAndPassword(email, password)
-    this.user$ = this.auth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
-        } else {
-          return of(null)
-        }
-      })
-    )
+    this.user$ = this.getUser()
     return this.router.navigateByUrl(this.redirectUrl)
   }
 
-  register(email: string, password: string, code: string) {
-    this.fireStore
-      .collection<Code>('codes', (ref) => ref.where('code', '==', code))
-      .snapshotChanges()
-      .subscribe((codes) => {
-        if (codes.length == 1) {
-          // this.auth.createUserWithEmailAndPassword(email, password)
-          console.log(true)
-          return this.signIn(email, password)
-        } else {
-        }
-      })
-  }
+  register(email: string, password: string, code: string) {}
 
-  async generateCode() {
+  async generateCode(access: roles) {
+    const code = uuidv4()
     this.user$.subscribe((user) => {
-      this.fireStore.collection<Code>('codes').add({
-        code: uuidv4().split('-')[0],
-        createdBy: user.firstInitial + '.' + user.lastName,
-      })
+      this.fireStore
+        .collection<Code>('codes')
+        .doc<Code>(code)
+        .set({
+          code: code,
+          createdBy: `${user.firstInitial}.${user.lastName} "${user.userName}"`,
+          access: access,
+        })
     })
   }
 
+  deleteCode(code: Code) {
+    this.fireStore.doc<Code>(`codes/${code.code}`).delete()
+  }
+
   get isLoggedIn(): Observable<boolean> {
-    return this.user$.pipe(
-      map((user) => !!user),
-      tap((isLoggedIn) => isLoggedIn)
+    return this.user$.pipe(map((user) => !!user))
+  }
+
+  private getUser(): Observable<User> {
+    return this.auth.authState.pipe(
+      switchMap((user) => {
+        if (!!user) {
+          console.log('Found User')
+          return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
+        }
+        return of(null)
+      })
     )
   }
 }

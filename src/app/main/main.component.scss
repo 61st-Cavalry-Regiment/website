@@ -1,5 +1,7 @@
 img {
-  width: 95%;
+  width: 1000px;
+  max-width: 52.08vw;
+  max-height: 600px;
 }
 
 .note {
@@ -42,12 +44,12 @@ a {
 .edit {
   padding: 8px 10.5px 7.5px 10.5px;
   position: absolute;
-  top: -.5px;
-  right: 27.5px;
+  top: 0;
+  right: 0;
   display: block;
   opacity: 0;
   z-index: 5;
-  background-color: rgba($color: #191919, $alpha: .5);
+  background-color: rgba($color: #191919, $alpha: .6);
   border-radius: 3px;
   button {
     border: 0;

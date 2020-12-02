@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFireStorage } from '@angular/fire/storage'
-import { Observable } from 'rxjs'
+import { Title } from '@angular/platform-browser'
+import { Observable, of } from 'rxjs'
 import { finalize } from 'rxjs/operators'
 import { AuthService } from '../services/auth/auth.service'
 declare var $: any
@@ -9,18 +10,16 @@ declare var $: any
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  imgUrl: Observable<string | null>
-  imgUrl2: Observable<string | null>
+  imgUrl: Observable<string | null> = of('../../assets/blank.png')
+  imgUrl2: Observable<string | null> = of('../../assets/blank.png')
   imgPending: File
   isLoggedIn: Observable<boolean>
-  modList: Observable<string>
-
-  constructor(private storage: AngularFireStorage, public auth: AuthService) {
-    this.isLoggedIn = auth.isLoggedIn
-    const ref = this.storage.ref('home/img_1.jpg')
-    this.imgUrl = ref.getDownloadURL()
-    this.imgUrl2 = this.storage.ref('home/img_2.jpg').getDownloadURL()
-    this.modList = this.storage.ref('home/Modlist.html').getDownloadURL()
+  constructor(
+    private storage: AngularFireStorage,
+    public auth: AuthService,
+    private title: Title
+  ) {
+    this.title.setTitle('61st Cavalry Regiment')
   }
 
   ngOnInit(): void {
@@ -38,6 +37,9 @@ export class MainComponent implements OnInit {
       modal.find('.modal-title').text('Change image for ' + images.get(image))
       modal.find('#save').data('whatever', image)
     })
+    this.isLoggedIn = this.auth.isLoggedIn
+    this.imgUrl = this.storage.ref('home/img_1.jpg').getDownloadURL()
+    this.imgUrl2 = this.storage.ref('home/img_2.jpg').getDownloadURL()
   }
 
   changeImg(img: string) {

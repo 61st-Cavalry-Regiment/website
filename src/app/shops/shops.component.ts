@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { AngularFireStorage } from '@angular/fire/storage'
-import { Observable } from 'rxjs'
+import { Title } from '@angular/platform-browser'
+import { Observable, of } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { Code, Codes } from '../models/codes.model'
 import { UnitPhotos } from '../models/unit-photos.model'
@@ -14,30 +15,20 @@ declare var $: any
 })
 export class ShopsComponent implements OnInit {
   codes: Code[]
-  user: Observable<User>
+  user: Observable<User> = of({ roles: { admin: false, website: false } })
   imgs: Observable<string>[] = []
   imgUrl: Observable<string>
   imgPending: File
   unitPhotos: UnitPhotos
+
   constructor(
     public auth: AuthService,
     private fireStore: AngularFirestore,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private title: Title
   ) {
-    this.fireStore
-      .collection<Code>('codes')
-      .valueChanges()
-      .subscribe((codes) => (this.codes = codes))
-    fireStore
-      .doc<UnitPhotos>('util/unit-photos')
-      .valueChanges()
-      .subscribe((unitPhotos) => (this.unitPhotos = unitPhotos))
-    this.user = auth.user$
-    for (let index = 0; index < 5; index++) {
-      this.imgs[index] = storage
-        .ref(`unit-photos/img_${index + 1}.jpg`)
-        .getDownloadURL()
-    }
+    this.user = this.auth.user$
+    this.user.subscribe(console.log)
   }
 
   ngOnInit(): void {
@@ -69,7 +60,7 @@ export class ShopsComponent implements OnInit {
   }
 
   generateCode() {
-    this.auth.generateCode()
+    // this.auth.generateCode()
   }
 
   clearCodes() {

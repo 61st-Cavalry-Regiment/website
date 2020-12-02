@@ -7,21 +7,32 @@
     </div>
   </div>
   <div class="row justify-content-center mb-5">
-    <form>
-      <div class="form-group">
-        <label for="usernameInput">Username</label>
-        <input type="text" #email class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="passwordIput">Password</label>
-        <input type="password" name="" #pw class="form-control">
-      </div>
-      <button class="btn btn-primary w-100" type="button" (click)="login(email.value, pw.value)">Login</button>
-      <div class="form-group">
-        <label for="codeInput">Code</label>
-        <input type="text" class="form-control" #code>
-      </div>
-      <button class="btn btn-primary w-100" type="button" (click)="register(email.value, pw.value, code.value)">Register</button>
+    <form [formGroup]="loginForm" class="row justify-content-center" (ngSubmit)="submitHandler()">
+      <!-- <span class="text-center">Value: {{loginForm.value | json}}</span> -->
+      <!-- <hr> -->
+      <mat-form-field>
+        <input matInput required placeholder="email" formControlName="email">
+
+        <mat-error *ngIf="email.invalid && email.touched">
+          {{emailErrorMessage}}
+        </mat-error>
+      </mat-form-field>
+      <div class="w-100"></div>
+      <mat-form-field>
+        <input matInput required placeholder="password" formControlName="password" type="password">
+
+        <mat-error *ngIf="password.invalid && password.touched">
+          {{passwordErrorMessage}}
+        </mat-error>
+
+      </mat-form-field>
+      <div class="w-100 my-1"></div>
+      <!-- <mat-checkbox formControlName="rememberMe">Remember Me</mat-checkbox> -->
+      <a routerLink="/forgot-password">Forgot Password</a>
+      <div class="w-100 mb-3"></div>
+      <button mat-raised-button [disabled]="loginForm.invalid" class="mx-auto mb-2" type="submit">Submit</button>
+      <div class="w-100"></div>
+      <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error>
     </form>
   </div>
 
