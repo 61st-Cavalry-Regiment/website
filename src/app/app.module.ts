@@ -7,6 +7,12 @@ import { AppComponent } from './app.component'
 import { MainComponent } from './main/main.component'
 import { NavbarComponent } from './navbar/navbar.component'
 import { RecruitmentComponent } from './recruitment/recruitment.component'
+import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth'
+import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore'
+import {
+  USE_EMULATOR as USE_FUNCTIONS_EMULATOR,
+  AngularFireFunctionsModule,
+} from '@angular/fire/functions'
 
 import { AngularFireModule } from '@angular/fire'
 import {
@@ -84,6 +90,7 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     AngularFireAnalyticsModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
+    AngularFireFunctionsModule,
     ReactiveFormsModule,
     MatInputModule,
     MatSelectModule,
@@ -108,6 +115,18 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
         allow_ad_personalization_signals: false,
         anonymize_ip: true,
       },
+    },
+    {
+      provide: USE_AUTH_EMULATOR,
+      useValue: environment.useEmulators ? ['192.168.1.127', 9099] : undefined,
+    },
+    {
+      provide: USE_FIRESTORE_EMULATOR,
+      useValue: environment.useEmulators ? ['192.168.1.127', 8080] : undefined,
+    },
+    {
+      provide: USE_FUNCTIONS_EMULATOR,
+      useValue: environment.useEmulators ? ['192.168.1.127', 5001] : undefined,
     },
   ],
   bootstrap: [AppComponent],
