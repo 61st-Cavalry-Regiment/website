@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { AngularFireAnalytics } from '@angular/fire/analytics'
 import { AngularFireStorage } from '@angular/fire/storage'
 import { Title } from '@angular/platform-browser'
 import { Observable, of } from 'rxjs'
@@ -17,7 +18,8 @@ export class MainComponent implements OnInit {
   constructor(
     private storage: AngularFireStorage,
     public auth: AuthService,
-    private title: Title
+    private title: Title,
+    private analitics: AngularFireAnalytics
   ) {
     this.title.setTitle('61st Cavalry Regiment')
   }
@@ -75,5 +77,9 @@ export class MainComponent implements OnInit {
 
   fileSelector(event) {
     this.imgPending = event.target.files[0]
+  }
+
+  click(link: string, name: string) {
+    this.analitics.logEvent('link_click', { link: link, name: name })
   }
 }

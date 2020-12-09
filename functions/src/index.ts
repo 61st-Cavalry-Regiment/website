@@ -43,4 +43,16 @@ exports.makeUppercase = functions.firestore
     return snap.ref.set({ uppercase }, { merge: true })
   })
 
-exports.combineName = functions.https.onCall((data, context) => {})
+exports.combineName = functions.https.onCall(
+  (data: { name: name }, context) => {
+    const name = data.name
+    return {
+      displayName: `${name.firstInital}. ${name.lastName} "${name.nickName}"`,
+    }
+  }
+)
+interface name {
+  firstInital: string
+  lastName: string
+  nickName: string
+}

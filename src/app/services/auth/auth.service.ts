@@ -4,11 +4,12 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { Router } from '@angular/router'
 import { Observable, of } from 'rxjs'
 import { User } from 'src/app/models/user.model'
-import { map, switchMap, tap } from 'rxjs/operators'
+import { map, switchMap, take, tap } from 'rxjs/operators'
 import { Code } from 'src/app/models/codes.model'
 import { v4 as uuidv4 } from 'uuid'
 import * as firebase from 'firebase/app'
 import { roles } from 'src/app/models/roles.model'
+import { UserAuthInfo } from 'src/app/models/authInfo.model'
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class AuthService {
   redirectUrl: string
 
   constructor(
-    private auth: AngularFireAuth,
+    private _fAuth: AngularFireAuth,
     private fireStore: AngularFirestore,
     private router: Router
   ) {
@@ -26,18 +27,80 @@ export class AuthService {
   }
 
   async signOut() {
-    await this.auth.signOut()
+    await this._fAuth.signOut()
     this.user$ = this.getUser()
     return this.router.navigateByUrl('/')
   }
 
-  async signIn(email: string, password: string, remember: boolean = false) {
-    await this.auth.signInWithEmailAndPassword(email, password)
+  async signIn(authInfo: UserAuthInfo) {
+    if (authInfo.rememberMe) {
+      await this._fAuth.setPersistence(
+        firebase.default.auth.Auth.Persistence.LOCAL
+      )
+      console.log('local persistance', true)
+    } else {
+      await this._fAuth.setPersistence(
+        firebase.default.auth.Auth.Persistence.SESSION
+      )
+      console.log('local persistance', false)
+    }
+    await this._fAuth.signInWithEmailAndPassword(
+      authInfo.email,
+      authInfo.password
+    )
     this.user$ = this.getUser()
     return this.router.navigateByUrl(this.redirectUrl)
   }
 
-  register(email: string, password: string, code: string) {}
+  async register(
+    email: string,
+    password: string,
+    code: string,
+    name: {
+      firstInital: string
+      lastName: string
+      nickName: string
+      displayName: string
+    }
+  ) {
+    code = code.toLowerCase()
+    //check code
+    this.fireStore
+      .collection<Code>('codes', (ref) => ref.where('code', '==', code))
+      .valueChanges()
+      .pipe(
+        take(1),
+        map((doc) => doc[0]),
+        tap((doc) => {
+          // console.log(doc)
+          if (doc) {
+            //create user
+            this._fAuth
+              .createUserWithEmailAndPassword(email, password)
+              .then((user) => {
+                console.log(email, password, code, name)
+                const data$: User = {
+                  uid: user.user.uid,
+                  firstInitial: name.firstInital,
+                  lastName: name.lastName,
+                  userName: name.nickName,
+                  displayName: name.displayName,
+                  roles: doc.access,
+                }
+                // console.log('user object', data$)
+                this.fireStore
+                  .collection('users')
+                  .doc<User>(user.user.uid)
+                  .set(data$)
+                this.fireStore.doc(`codes/${doc.code}`).delete()
+              })
+          } else {
+            throw new Error('Code not found')
+          }
+        })
+      )
+      .subscribe()
+  }
 
   async generateCode(access: roles) {
     const code = uuidv4()
@@ -62,7 +125,7 @@ export class AuthService {
   }
 
   private getUser(): Observable<User> {
-    return this.auth.authState.pipe(
+    return this._fAuth.authState.pipe(
       switchMap((user) => {
         if (!!user) {
           console.log('Found User')

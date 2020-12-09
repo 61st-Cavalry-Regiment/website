@@ -20,6 +20,7 @@ import {
   CONFIG,
   ScreenTrackingService,
   UserTrackingService,
+  DEBUG_MODE,
 } from '@angular/fire/analytics'
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFirestoreModule } from '@angular/fire/firestore'
@@ -37,6 +38,8 @@ import { SafePipe } from './pipes/safe.pipe'
 import { TestComponent } from './test/test.component'
 import { ReactiveFormsModule } from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
+//Material
 import { MatInputModule } from '@angular/material/input'
 import { MatSelectModule } from '@angular/material/select'
 import { MatButtonModule } from '@angular/material/button'
@@ -47,6 +50,9 @@ import { MatTableModule } from '@angular/material/table'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatSnackBarModule } from '@angular/material/snack-bar'
+import { MatCardModule } from '@angular/material/card'
+
 import { FormsModule } from '@angular/forms'
 import { AdminComponent } from './shops/admin/admin.component'
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component'
@@ -104,6 +110,8 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     MatPaginatorModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatCardModule,
   ],
   providers: [
     ScreenTrackingService,
@@ -118,15 +126,19 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     },
     {
       provide: USE_AUTH_EMULATOR,
-      useValue: environment.useEmulators ? ['192.168.1.127', 9099] : undefined,
+      useValue: environment.useEmulators ? ['localhost', 9099] : undefined,
     },
     {
       provide: USE_FIRESTORE_EMULATOR,
-      useValue: environment.useEmulators ? ['192.168.1.127', 8080] : undefined,
+      useValue: environment.useEmulators ? ['localhost', 8080] : undefined,
     },
     {
       provide: USE_FUNCTIONS_EMULATOR,
-      useValue: environment.useEmulators ? ['192.168.1.127', 5001] : undefined,
+      useValue: environment.useEmulators ? ['localhost', 5001] : undefined,
+    },
+    {
+      provide: DEBUG_MODE,
+      useValue: true,
     },
   ],
   bootstrap: [AppComponent],

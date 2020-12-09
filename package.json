@@ -46,6 +46,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/jquery": "^3.5.4",
     "@types/node": "^12.19.8",
+    "@types/firebase": "^3.2.1",
     "codelyzer": "^5.1.2",
     "firebase-tools": "^8.16.2",
     "fuzzy": "^0.1.3",

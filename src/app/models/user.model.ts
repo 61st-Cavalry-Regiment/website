@@ -7,4 +7,5 @@ export interface User {
   lastName?: string
   userName?: string
   roles?: roles
+  displayName?: string
 }

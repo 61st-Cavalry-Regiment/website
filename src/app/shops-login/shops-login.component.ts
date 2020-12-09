@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { MatSnackBar } from '@angular/material/snack-bar'
 import { Title } from '@angular/platform-browser'
 import { AuthService } from '../services/auth/auth.service'
 
@@ -16,7 +17,8 @@ export class ShopsLoginComponent implements OnInit {
   constructor(
     public auth: AuthService,
     private fb: FormBuilder,
-    private title: Title
+    private title: Title,
+    private _snackBar: MatSnackBar
   ) {
     this.title.setTitle('Login - 61st Cavalry Regiment')
   }
@@ -78,11 +80,11 @@ export class ShopsLoginComponent implements OnInit {
     this.loading = true
     const formValue = this.loginForm.value
     try {
-      await this.auth.signIn(
-        formValue.email,
-        formValue.password,
-        formValue.rememberMe
-      )
+      await this.auth.signIn({
+        email: formValue.email,
+        password: formValue.password,
+        rememberMe: formValue.rememberMe,
+      })
       this.success = true
     } catch (err) {
       let errorCode = err.code
@@ -99,6 +101,10 @@ export class ShopsLoginComponent implements OnInit {
           this.errorMessage = 'Unkown error, contact Thunder.'
           break
       }
+      this._snackBar.open(this.errorMessage, 'Close', {
+        duration: 5000,
+        panelClass: ['warn'],
+      })
     }
     this.loading = false
   }

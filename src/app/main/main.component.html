@@ -7,6 +7,7 @@
     <h3>
       Feel free to suport us on
       <a
+        (click)='click("https://www.patreon.com/bePatron?u=20745652&redirect_uri=https%3A%2F%2F61st-regiment.com%2F&utm_medium=widget","Patreon")'
         target="_blank"
         href="https://www.patreon.com/bePatron?u=20745652&redirect_uri=https%3A%2F%2F61st-regiment.com%2F&utm_medium=widget"
         >Patreon.</a
@@ -35,13 +36,14 @@
       <p>
         Please note: All unit photos can be found in the
         <em>#Unit-Photos</em> channel on our
-        <a href="https://discord.gg/R6mG2JKNxt">Discord</a>.
+        <a (click)='click("https://discord.gg/R6mG2JKNxt","Discord")' href="https://discord.gg/R6mG2JKNxt">Discord</a>.
       </p>
     </div>
   </div>
   <div class="row break"></div>
   <div class="row justify-content-center pb-5">
     <a
+      (click)='click("https://drive.google.com/drive/folders/1ODhCZ9lkEIsRqv0teSUHLh8aNq6pdrW_?usp=sharing","OPORDs")'
       href="https://drive.google.com/drive/folders/1ODhCZ9lkEIsRqv0teSUHLh8aNq6pdrW_?usp=sharing"
       target="_blank"
     >
@@ -50,16 +52,20 @@
     <div class="w-100"></div>
     <h2>
       <a
+        (click)='click("https://steamcommunity.com/sharedfiles/filedetails/?id=2208930462","Modlist View")'
         href="https://steamcommunity.com/sharedfiles/filedetails/?id=2208930462"
         target="_blank"
         >View</a
-      >/<a target="_blank" href="../../assets/Modlist.html" download="61st_Modlist.html"
+      >/<a 
+        (click)='click("../../assets/Modlits.html","Modlist Download")'
+        target="_blank" href="../../assets/Modlist.html" download="61st_Modlist.html"
         >Download</a
       >
       our required modlist.
     </h2>
     <div class="w-100"></div>
     <a
+      (click)='click("https://steamcommunity.com/sharedfiles/filedetails/?id=2120718749","Whitelist")'
       href="https://steamcommunity.com/sharedfiles/filedetails/?id=2120718749"
       target="_blank"
     >
@@ -70,7 +76,7 @@
     <p>
       For more information about the unit and our operations please refer to the
       rest of the website or our
-      <a target="_blank" href="https://discord.gg/R6mG2JKNxt">discord</a>!
+      <a (click)='click("https://discord.gg/R6mG2JKNxt","Discord")' target="_blank" href="https://discord.gg/R6mG2JKNxt">discord</a>!
     </p>
   </div>
 
