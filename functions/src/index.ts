@@ -1,4 +1,6 @@
 import * as functions from 'firebase-functions'
+import * as https from 'https'
+import * as sharp from 'sharp'
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -9,39 +11,6 @@ import * as functions from 'firebase-functions'
 // });
 import * as admin from 'firebase-admin'
 admin.initializeApp()
-
-// Take the text parameter passed to this HTTP endpoint and insert it into
-// Cloud Firestore under the path /messages/:documentId/original
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
-  const original = req.query.text
-  // Push the new message into Cloud Firestore using the Firebase Admin SDK.
-  const writeResult = await admin
-    .firestore()
-    .collection('messages')
-    .add({ original: original })
-  // Send back a message that we've succesfully written the message
-  res.json({ result: `Message with ID: ${writeResult.id} added.` })
-})
-
-// Listens for new messages added to /messages/:documentId/original and creates an
-// uppercase version of the message to /messages/:documentId/uppercase
-exports.makeUppercase = functions.firestore
-  .document('/messages/{documentId}')
-  .onCreate((snap, context) => {
-    // Grab the current value of what was written to Cloud Firestore.
-    const original = snap.data().original
-
-    // Access the parameter `{documentId}` with `context.params`
-    functions.logger.log('Uppercasing', context.params.documentId, original)
-
-    const uppercase = original.toUpperCase()
-
-    // You must return a Promise when performing asynchronous tasks inside a Functions such as
-    // writing to Cloud Firestore.
-    // Setting an 'uppercase' field in Cloud Firestore document returns a Promise.
-    return snap.ref.set({ uppercase }, { merge: true })
-  })
 
 exports.combineName = functions.https.onCall(
   (data: { name: name }, context) => {
@@ -56,3 +25,85 @@ interface name {
   lastName: string
   nickName: string
 }
+
+const optionToKeyVal = (option: string) =>
+  ((split: string[]) =>
+    split.length > 0
+      ? { [split[0]]: split.length > 1 ? split[1] : true }
+      : undefined)(option.split('='))
+
+// Parse options string and return options object
+const parseOptions = (
+  options: string
+): {
+  width?: string
+  height?: string
+  lossless?: boolean
+} =>
+  options
+    .split(',')
+    .reduce((acc, option) => ({ ...acc, ...optionToKeyVal(option) }), {})
+
+// Configure allowed request URLs. This should match the hosting glob pattern
+const allowedPrefix = '/image/'
+const isUrlAllowed = (url: string) => url.startsWith(allowedPrefix)
+
+// Configure source image URLs. This assumes that we store images on Firebase Storage
+// const projectId = process.env.GCLOUD_PROJECT
+const sourcePrefix = `https://firebasestorage.googleapis.com/v0/b/61st-regiment/o/`
+const sourceSuffix = `?alt=media`
+
+// Validate and split request URL into options and source parts
+const tokenizeUrl = (url: string) => {
+  if (!isUrlAllowed(url)) {
+    throw new Error('URL is not allowed')
+  }
+  const urlNoPrefix = url.slice(allowedPrefix.length)
+  const optionsSlashIdx = urlNoPrefix.indexOf('/')
+  const sourceKey = encodeURIComponent(urlNoPrefix.slice(optionsSlashIdx + 1))
+  const optionsStr = urlNoPrefix.slice(0, optionsSlashIdx)
+  const sourceUrl = sourcePrefix + sourceKey + sourceSuffix
+  return [optionsStr, sourceUrl]
+}
+
+// Set CDN caching duration in seconds
+const cacheMaxAge = 1 * 60 * 60 // 1 Hour
+
+export const imageTransform = functions.https.onRequest((request, response) => {
+  let sourceUrl
+  let options
+  try {
+    const [optionsStr, sourceUrlStr] = tokenizeUrl(request.url)
+    sourceUrl = new URL(sourceUrlStr)
+    options = parseOptions(optionsStr)
+  } catch (error) {
+    response.status(400).send()
+    return
+  }
+  // Modern browsers that support WebP format will send an appropriate Accept header
+  const acceptHeader = request.header('Accept')
+  const webpAccepted =
+    !!acceptHeader && acceptHeader.indexOf('image/webp') !== -1
+
+  // If one of the dimensions is undefined the automatic sizing
+  // preserving the aspect ratio will be applied
+  const transform = sharp()
+    .resize(
+      options.width ? Number(options.width) : undefined,
+      options.height ? Number(options.height) : undefined,
+      {
+        fit: 'cover',
+      }
+    )
+    .webp({ force: webpAccepted, lossless: !!options.lossless })
+
+  // Set cache control headers. This lets Firebase Hosting CDN to cache
+  // the converted image and serve it from cache on subsequent requests.
+  // We need to Vary on Accept header to correctly handle WebP support detection.
+  const responsePipe = response
+    .set('Cache-Control', `public, max-age=${cacheMaxAge}`)
+    .set('Vary', 'Accept')
+
+  // The built-in node https works here
+  https.get(sourceUrl, (res) => res.pipe(transform).pipe(responsePipe))
+})

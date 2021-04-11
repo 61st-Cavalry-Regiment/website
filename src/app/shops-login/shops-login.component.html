@@ -1,39 +1,57 @@
 <div class="container">
   <div class="row justify-content-center break">
-    <h1>61st Shops Login</h1>
-    <div class="w-100"></div>
-    <div class="d-flex align-items-center">
-      <img class="w-50 mx-auto" src="../../assets/61st.png" alt="">
+    <h1 class="col-12 text-center">61st Shops Login</h1>
+    <img class="mx-auto col-12 w-25" src="../../assets/61st.png" alt="" />
+    <div class="mb-5">
+      <form
+        [formGroup]="loginForm"
+        class="row justify-content-center"
+        (ngSubmit)="submitHandler()"
+      >
+        <!-- <span class="text-center">Value: {{loginForm.value | json}}</span> -->
+        <!-- <hr> -->
+        <mat-form-field>
+          <input
+            matInput
+            required
+            placeholder="email"
+            formControlName="email"
+          />
+
+          <mat-error *ngIf="email.invalid && email.touched">
+            {{ emailErrorMessage }}
+          </mat-error>
+        </mat-form-field>
+        <div class="w-100"></div>
+        <mat-form-field>
+          <input
+            matInput
+            required
+            placeholder="password"
+            formControlName="password"
+            type="password"
+          />
+
+          <mat-error *ngIf="password.invalid && password.touched">
+            {{ passwordErrorMessage }}
+          </mat-error>
+        </mat-form-field>
+        <div class="w-100 my-1"></div>
+        <!-- <mat-checkbox class="w-auto" formControlName="rememberMe">Remember Me</mat-checkbox>
+        <div class="w-100"></div> -->
+        <a routerLink="/forgot-password" class="w-auto">Forgot Password</a>
+        <div class="w-100 mb-3"></div>
+        <button
+          mat-raised-button
+          [disabled]="loginForm.invalid"
+          class="mx-auto w-auto mb-2"
+          type="submit"
+        >
+          Submit
+        </button>
+        <!-- <div class="w-100"></div> -->
+        <!-- <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error> -->
+      </form>
     </div>
   </div>
-  <div class="row justify-content-center mb-5">
-    <form [formGroup]="loginForm" class="row justify-content-center" (ngSubmit)="submitHandler()">
-      <!-- <span class="text-center">Value: {{loginForm.value | json}}</span> -->
-      <!-- <hr> -->
-      <mat-form-field>
-        <input matInput required placeholder="email" formControlName="email">
-
-        <mat-error *ngIf="email.invalid && email.touched">
-          {{emailErrorMessage}}
-        </mat-error>
-      </mat-form-field>
-      <div class="w-100"></div>
-      <mat-form-field>
-        <input matInput required placeholder="password" formControlName="password" type="password">
-
-        <mat-error *ngIf="password.invalid && password.touched">
-          {{passwordErrorMessage}}
-        </mat-error>
-
-      </mat-form-field>
-      <div class="w-100 my-1"></div>
-      <!-- <mat-checkbox formControlName="rememberMe">Remember Me</mat-checkbox> -->
-      <a routerLink="/forgot-password">Forgot Password</a>
-      <div class="w-100 mb-3"></div>
-      <button mat-raised-button [disabled]="loginForm.invalid" class="mx-auto mb-2" type="submit">Submit</button>
-      <!-- <div class="w-100"></div> -->
-      <!-- <mat-error *ngIf="errorMessage">{{errorMessage}}</mat-error> -->
-    </form>
-  </div>
-
 </div>

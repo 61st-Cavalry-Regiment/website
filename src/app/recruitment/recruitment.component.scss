@@ -1,7 +1,13 @@
-p,h1{
-    margin: 1rem;
+p,
+h1 {
+  margin: 1rem;
 }
 
-p{
-    padding: 0 1rem 0 1rem;
+p {
+  padding: 0 1rem 0 1rem;
+}
+
+li {
+  width: fit-content;
+  margin: 0 auto;
 }

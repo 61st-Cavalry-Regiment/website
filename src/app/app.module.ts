@@ -24,7 +24,7 @@ import {
 } from '@angular/fire/analytics'
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFirestoreModule } from '@angular/fire/firestore'
-import { AngularFireStorageModule } from '@angular/fire/storage'
+import { AngularFireStorageModule, BUCKET } from '@angular/fire/storage'
 import { environment } from 'src/environments/environment'
 import { BilletsComponent } from './billets/billets.component'
 import { NotFoundComponent } from './not-found/not-found.component'
@@ -52,6 +52,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { MatCardModule } from '@angular/material/card'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 import { FormsModule } from '@angular/forms'
 import { AdminComponent } from './shops/admin/admin.component'
@@ -62,6 +63,9 @@ import { GenerateCodeComponent } from './shops/admin/generate-code/generate-code
 import { RegisterComponent } from './register/register.component'
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component'
 import { UsermgmtComponent } from './usermgmt/usermgmt.component'
+import { ImgUploadComponent } from './modals/img-upload/img-upload.component'
+import { DragNDropDirective } from './directives/drag-ndrop.directive';
+import { ImgViewComponent } from './modals/img-view/img-view.component'
 
 @NgModule({
   declarations: [
@@ -86,6 +90,9 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     RegisterComponent,
     ForgotPasswordComponent,
     UsermgmtComponent,
+    ImgUploadComponent,
+    DragNDropDirective,
+    ImgViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -112,6 +119,7 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCardModule,
+    MatProgressBarModule,
   ],
   providers: [
     ScreenTrackingService,
@@ -138,7 +146,11 @@ import { UsermgmtComponent } from './usermgmt/usermgmt.component'
     },
     {
       provide: DEBUG_MODE,
-      useValue: true,
+      useValue: false,
+    },
+    {
+      provide: BUCKET,
+      useValue: '61st-regiment',
     },
   ],
   bootstrap: [AppComponent],

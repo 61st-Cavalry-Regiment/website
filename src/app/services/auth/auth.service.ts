@@ -33,17 +33,6 @@ export class AuthService {
   }
 
   async signIn(authInfo: UserAuthInfo) {
-    if (authInfo.rememberMe) {
-      await this._fAuth.setPersistence(
-        firebase.default.auth.Auth.Persistence.LOCAL
-      )
-      console.log('local persistance', true)
-    } else {
-      await this._fAuth.setPersistence(
-        firebase.default.auth.Auth.Persistence.SESSION
-      )
-      console.log('local persistance', false)
-    }
     await this._fAuth.signInWithEmailAndPassword(
       authInfo.email,
       authInfo.password
@@ -64,6 +53,33 @@ export class AuthService {
     }
   ) {
     code = code.toLowerCase()
+    let codeDoc = await this.fireStore
+      .doc<Code>(`codes/${code}`)
+      .get()
+      .toPromise()
+    console.log(codeDoc.get('access'))
+
+    if (codeDoc.exists) {
+      console.log('found code')
+      let user = await this._fAuth.createUserWithEmailAndPassword(
+        email,
+        password
+      )
+      const data$: User = {
+        uid: user.user.uid,
+        firstInitial: name.firstInital,
+        lastName: name.lastName,
+        userName: name.nickName,
+        displayName: name.displayName,
+        roles: codeDoc.get('access'),
+      }
+      console.log('data', data$)
+      this.fireStore.collection<User>('users').doc(user.user.uid).set(data$)
+      codeDoc.ref.delete()
+      return
+    } else {
+      throw 'Code not found'
+    }
     //check code
     this.fireStore
       .collection<Code>('codes', (ref) => ref.where('code', '==', code))
@@ -128,7 +144,7 @@ export class AuthService {
     return this._fAuth.authState.pipe(
       switchMap((user) => {
         if (!!user) {
-          console.log('Found User')
+          console.log('Found User', user.email)
           return this.fireStore.doc<User>(`users/${user.uid}`).valueChanges()
         }
         return of(null)

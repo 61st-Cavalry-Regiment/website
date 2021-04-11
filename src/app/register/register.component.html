@@ -1,62 +1,134 @@
 <div class="container">
   <div class="row">
-    <div class="col-6">
+    <div class="col-12 col-lg-6 text-center">
       <!-- Info -->
-      <p>hi</p>
-      {{registerForm.status|json}}
+      <img
+        [src]="CDN.getImage({ path: '61st.png', width: 500 })"
+        alt=""
+        class="mx-auto"
+      />
+      <!-- {{ registerForm.status | json }} -->
     </div>
-    <mat-card class="row col-6 justify-content-center text-center">
-      <div class="m-3">
-        <h3>Register</h3>
-        <!-- Form -->
-        <form [formGroup]="registerForm" (ngSubmit)="submitHandler()" class="row m-3">
-          <mat-form-field class="w-100">
-            <input matInput required placeholder="Email" formControlName="email">
-            <mat-error *ngIf="email.invalid && email.touched && emailErrorMessage">
-              {{emailErrorMessage}}
-            </mat-error>
-          </mat-form-field>
-          <div [formGroup]="passwordForm" class="w-100">
-              <mat-form-field class="w-50">
-                <input matInput required placeholder="Password" formControlName="password" type="password">
-                <mat-error *ngIf="password.invalid && password.touched && passwordErrorMessage">
-                  {{passwordErrorMessage}}
+    <div
+      class="col-12 col-lg-6 gx-5 gx-lg-4 mx-3 mx-lg-0 justify-content-center text-center row"
+    >
+      <mat-card class="row justify-content-center text-center">
+        <div class="m-3">
+          <mat-card-title>
+            <h3>Register</h3>
+          </mat-card-title>
+          <!-- Form -->
+          <form
+            [formGroup]="registerForm"
+            (ngSubmit)="submitHandler()"
+            class="row m-3"
+          >
+            <mat-form-field class="w-100 pb-1">
+              <input
+                matInput
+                required
+                placeholder="Email"
+                formControlName="email"
+              />
+              <mat-error
+                *ngIf="email.invalid && email.touched && emailErrorMessage"
+              >
+                {{ emailErrorMessage }}
+              </mat-error>
+            </mat-form-field>
+            <div [formGroup]="passwordForm" class="w-100">
+              <mat-form-field class="w-50 pb-1">
+                <input
+                  matInput
+                  required
+                  placeholder="Password"
+                  formControlName="password"
+                  type="password"
+                />
+                <mat-error
+                  *ngIf="
+                    password.invalid && password.touched && passwordErrorMessage
+                  "
+                >
+                  {{ passwordErrorMessage }}
                 </mat-error>
               </mat-form-field>
-              <mat-form-field class="w-50 pl-1">
-                <input matInput required placeholder="Repeat Password" formControlName="passwordRepeat" type="password">
-                <mat-error *ngIf="passwordConfirm.invalid && passwordConfirm.touched && passwordConfirmErrorMessage">
-                  {{passwordConfirmErrorMessage}}
+              <mat-form-field class="w-50 ps-1 pb-1">
+                <input
+                  matInput
+                  required
+                  placeholder="Repeat Password"
+                  formControlName="passwordRepeat"
+                  type="password"
+                />
+                <mat-error
+                  *ngIf="
+                    passwordConfirm.invalid &&
+                    passwordConfirm.touched &&
+                    passwordConfirmErrorMessage
+                  "
+                >
+                  {{ passwordConfirmErrorMessage }}
                 </mat-error>
               </mat-form-field>
-          </div>
-          <mat-form-field class="w-50">
-            <input matInput required placeholder="First Initial" formControlName="firstInitial">
-            <mat-error *ngIf="name.firstInitial.invalid && name.firstInitial.touched">
-                {{firstInitialErrorMessage}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-50 pl-1">
-            <input matInput required placeholder="Last Name" formControlName="lastName">
-            <mat-error *ngIf="name.lastName.invalid && name.lastName.touched">
+            </div>
+            <mat-form-field class="w-50 pb-1">
+              <input
+                matInput
+                required
+                placeholder="First Initial"
+                formControlName="firstInitial"
+              />
+              <mat-error
+                *ngIf="name.firstInitial.invalid && name.firstInitial.touched"
+              >
+                {{ firstInitialErrorMessage }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-50 ps-1 pb-1">
+              <input
+                matInput
+                required
+                placeholder="Last Name"
+                formControlName="lastName"
+              />
+              <mat-error *ngIf="name.lastName.invalid && name.lastName.touched">
                 Please provide a last name.
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-100">
-            <input matInput required placeholder="Nickname" formControlName="nickName">
-            <mat-error *ngIf="name.nickName.invalid && name.nickName.touched">
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 pb-1">
+              <input
+                matInput
+                required
+                placeholder="Nickname"
+                formControlName="nickName"
+              />
+              <mat-error *ngIf="name.nickName.invalid && name.nickName.touched">
                 Please provide a nickname.
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field class="w-100">
-            <input matInput required placeholder="Code" formControlName="code">
-            <mat-error *ngIf="code.invalid && code.touched">
-                Please provide a code.
-            </mat-error>
-          </mat-form-field>
-          <button mat-raised-button [disabled]="registerForm.invalid" class="mx-auto mb-2" type="submit">Submit</button>
-        </form>
-      </div>
-    </mat-card>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-100 pb-1">
+              <input
+                matInput
+                required
+                placeholder="Code"
+                formControlName="code"
+              />
+              <mat-error *ngIf="code.invalid && code.touched">
+                {{ codeErrorMessage }}
+              </mat-error>
+            </mat-form-field>
+            <button
+              mat-raised-button
+              [disabled]="registerForm.invalid"
+              class="mx-auto mb-2"
+              type="submit"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </mat-card>
+    </div>
   </div>
 </div>

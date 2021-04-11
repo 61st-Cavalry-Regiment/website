@@ -19,18 +19,18 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   private login: UrlTree
   private dash: UrlTree
   constructor(
-    private authService: AuthService,
+    private auth: AuthService,
     private router: Router,
-    private auth: AngularFireAuth
+    private _afAuth: AngularFireAuth
   ) {
     this.login = this.router.parseUrl('login')
     this.dash = this.router.parseUrl('shops')
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {
-    this.authService.isLoggedIn.subscribe(console.log)
+    this.auth.isLoggedIn.subscribe(console.log)
     const url: string = state.url
-    return this.authService.isLoggedIn.pipe(
+    return this.auth.isLoggedIn.pipe(
       map((isLoggedIn) => {
         console.log('Guard start')
         console.log('Loggin State:', isLoggedIn)
@@ -50,7 +50,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             'Guard failed, redirecting to login page. Redirect url:',
             url
           )
-          this.authService.redirectUrl = url
+          this.auth.redirectUrl = url
           return this.router.navigateByUrl('/login')
         }
       })
@@ -64,12 +64,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (route.routeConfig.path === 'home') {
       return true
     }
-    return this.authService.user$.pipe(
+    return this.auth.user$.pipe(
       map((user) => {
         console.log(user.roles)
 
         console.log('Child Guard Start')
-        if (user.roles[route.routeConfig.path]) {
+        if (user.roles[route.routeConfig.path].access) {
           console.log('Guard Passed')
           return true
         }

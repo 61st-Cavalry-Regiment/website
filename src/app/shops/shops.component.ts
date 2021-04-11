@@ -15,7 +15,9 @@ declare var $: any
 })
 export class ShopsComponent implements OnInit {
   codes: Code[]
-  user: Observable<User> = of({ roles: { admin: false, website: false } })
+  user: Observable<User> = of({
+    roles: { admin: { access: false }, website: { access: false } },
+  })
   imgs: Observable<string>[] = []
   imgUrl: Observable<string>
   imgPending: File

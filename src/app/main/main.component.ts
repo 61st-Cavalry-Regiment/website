@@ -3,28 +3,32 @@ import { AngularFireAnalytics } from '@angular/fire/analytics'
 import { AngularFireStorage } from '@angular/fire/storage'
 import { Title } from '@angular/platform-browser'
 import { Observable, of } from 'rxjs'
-import { finalize } from 'rxjs/operators'
+import { finalize, take } from 'rxjs/operators'
 import { AuthService } from '../services/auth/auth.service'
+import { environment } from 'src/environments/environment'
+import { CdnService } from '../services/cdn.service'
+import { MatDialog } from '@angular/material/dialog'
+import { ImgUploadComponent } from '../modals/img-upload/img-upload.component'
 declare var $: any
 @Component({
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
-  imgUrl: Observable<string | null> = of('../../assets/blank.png')
-  imgUrl2: Observable<string | null> = of('../../assets/blank.png')
   imgPending: File
   isLoggedIn: Observable<boolean>
   constructor(
     private storage: AngularFireStorage,
     public auth: AuthService,
     private title: Title,
-    private analitics: AngularFireAnalytics
+    private analitics: AngularFireAnalytics,
+    public CDN: CdnService,
+    private dialog: MatDialog
   ) {
     this.title.setTitle('61st Cavalry Regiment')
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     $('#changeImg').on('show.bs.modal', function (event) {
       var images: Map<string, string> = new Map([
         ['img_1', 'Image 1'],
@@ -40,12 +44,17 @@ export class MainComponent implements OnInit {
       modal.find('#save').data('whatever', image)
     })
     this.isLoggedIn = this.auth.isLoggedIn
-    this.imgUrl = this.storage.ref('home/img_1.jpg').getDownloadURL()
-    this.imgUrl2 = this.storage.ref('home/img_2.jpg').getDownloadURL()
+    // this.changeImg('img1', 'test/')
   }
 
-  changeImg(img: string) {
+  changeImg(img: string, path) {
     console.log('Img Changed')
+    this.dialog.open(ImgUploadComponent, {
+      data: {
+        img: img,
+        path: path,
+      },
+    })
   }
 
   uploadFile(event) {

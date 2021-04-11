@@ -1,4 +1,9 @@
 export interface roles {
-  admin: boolean
-  website: boolean
+  admin: role
+  website: role
+}
+
+export interface role {
+  access: boolean
+  lead?: boolean
 }

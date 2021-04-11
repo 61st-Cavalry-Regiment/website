@@ -11,4 +11,6 @@ export const environment = {
     measurementId: 'G-9NG0TCMS22',
   },
   useEmulators: false,
+  cdn: 'https://cdn.61st-regiment.com/',
+  // cdn: 'http://127.0.0.1:5005/cdn/image/',
 }

@@ -83,7 +83,6 @@ export class ShopsLoginComponent implements OnInit {
       await this.auth.signIn({
         email: formValue.email,
         password: formValue.password,
-        rememberMe: formValue.rememberMe,
       })
       this.success = true
     } catch (err) {

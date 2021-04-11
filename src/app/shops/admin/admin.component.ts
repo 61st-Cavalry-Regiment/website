@@ -46,6 +46,12 @@ export class AdminComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('Dialog result:', result)
       if (result) {
+        for (var key in result) {
+          result[key] = {
+            access: result[key],
+          }
+        }
+        console.log('Dialog result:', result)
         this.auth.generateCode(result)
       }
     })
@@ -58,7 +64,7 @@ export class AdminComponent implements OnInit {
   getRoles(roles: roles) {
     let result: string[] = []
     for (const [k, v] of Object.entries(roles)) {
-      if (v) {
+      if (v.access) {
         result.push(k)
       }
     }

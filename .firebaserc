@@ -2,8 +2,14 @@
   "targets": {
     "new-web-858be": {
       "hosting": {
-        "Calvalry-Regiment-Website": [
+        "live": [
           "new-web-858be"
+        ],
+        "test": [
+          "test61"
+        ],
+        "cdn": [
+          "cdn-feb3c"
         ]
       }
     }

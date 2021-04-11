@@ -1,26 +1,26 @@
 <div class="container">
-  <div class="row justify-content-center">
-    <h1>Unit Photos</h1>
+  <div class="row justify-content-center mb-4">
+    <h1 class="text-center col-12">Unit Photos</h1>
   </div>
   <div class="row justify-content-center my-3">
     <div
-      id="carouselExampleIndicators"
+      id="carouselIndicators"
       class="carousel slide"
       data-ride="carousel"
     >
       <ol class="carousel-indicators">
         <li
           *ngFor="let img of photos; index as i; first as first"
-          data-target="#carouselExampleIndicators"
+          data-target="#carouselIndicators"
           [attr.data-slide-to]="i"
           [ngClass]="{ active: first }"
         ></li>
         <!-- <li
-          data-target="#carouselExampleIndicators"
+          data-target="#carouselIndicators"
           data-slide-to="0"
           class="active"
         ></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li> -->
+        <li data-target="#carouselIndicators" data-slide-to="1"></li> -->
       </ol>
       <div class="carousel-inner">
         <div
@@ -28,33 +28,32 @@
           class="carousel carousel-item"
           [ngClass]="{ active: isFirst }"
         >
-          <img src="{{ item |async}}" alt="" class="d-block w-100" />
+          <img src="{{ item}}" alt="" class="d-block w-100" />
         </div>
       </div>
       <a
         class="carousel-control-prev"
-        href="#carouselExampleIndicators"
+        href="#carouselIndicators"
         role="button"
-        data-slide="prev"
+        data-bs-slide="prev"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
+        <span class="visually-hidden">Previous</span>
       </a>
       <a
         class="carousel-control-next"
-        href="#carouselExampleIndicators"
+        href="#carouselIndicators"
         role="button"
-        data-slide="next"
+        data-bs-slide="next"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
+        <span class="visually-hidden">Next</span>
       </a>
     </div>
   </div>
   <div class="row justify-content-center my-3 mb-5">
-    <h1>Latest Operation:</h1>
-    <div class="w-100"></div>
-    <div class="embed-responsive embed-responsive-16by9">
+    <h1 class="col-12 text-center my-4">Latest Operation:</h1>
+    <div class="ratio ratio-16x9">
       <iframe
         [src]="ytVid|safe"
         frameborder="0"

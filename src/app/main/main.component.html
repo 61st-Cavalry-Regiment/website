@@ -7,7 +7,12 @@
     <h3>
       Feel free to suport us on
       <a
-        (click)='click("https://www.patreon.com/bePatron?u=20745652&redirect_uri=https%3A%2F%2F61st-regiment.com%2F&utm_medium=widget","Patreon")'
+        (click)="
+          click(
+            'https://www.patreon.com/bePatron?u=20745652&redirect_uri=https%3A%2F%2F61st-regiment.com%2F&utm_medium=widget',
+            'Patreon'
+          )
+        "
         target="_blank"
         href="https://www.patreon.com/bePatron?u=20745652&redirect_uri=https%3A%2F%2F61st-regiment.com%2F&utm_medium=widget"
         >Patreon.</a
@@ -18,17 +23,41 @@
   <div class="row justify-content-center">
     <h1>This week in the 61st:</h1>
     <div class="w-100 my-2"></div>
-    <div class="d-flex align-items-center">
-      <div class="edit-img  ">
-        <img [src]="imgUrl|async" alt="" class="mx-auto" />
-        <div class="edit" *ngIf="isLoggedIn|async"><button data-toggle="modal" data-target="#changeImg" data-whatever="img_1" ><i class="material-icons">create</i></button></div>
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="edit-img">
+        <img
+          [src]="CDN.getImage({ path: 'home/img_1.jpg', width: 1000 })"
+          alt=""
+          class="mx-auto"
+        />
+        <div class="edit" *ngIf="isLoggedIn | async">
+          <button
+            (click)="
+              changeImg('img_1'.convert().capitalize(), 'home/img_1.jpg')
+            "
+          >
+            <i class="material-icons">create</i>
+          </button>
+        </div>
       </div>
     </div>
     <div class="w-100 my-3"></div>
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-center">
       <div class="edit-img">
-        <img [src]="imgUrl2|async" alt="" class="mx-auto" />
-        <div class="edit" *ngIf="isLoggedIn|async"><button data-toggle="modal" data-target="#changeImg" data-whatever="img_2" ><i class="material-icons">create</i></button></div>
+        <img
+          [src]="CDN.getImage({ path: 'home/img_2.jpg', width: 1000 })"
+          alt=""
+          class="mx-auto"
+        />
+        <div class="edit" *ngIf="isLoggedIn | async">
+          <button
+            (click)="
+              changeImg('img_2'.convert().capitalize(), 'home/img_2.jpg')
+            "
+          >
+            <i class="material-icons">create</i>
+          </button>
+        </div>
       </div>
     </div>
     <div class="w-100 my-1"></div>
@@ -36,71 +65,41 @@
       <p>
         Please note: All unit photos can be found in the
         <em>#Unit-Photos</em> channel on our
-        <a (click)='click("https://discord.gg/R6mG2JKNxt","Discord")' href="https://discord.gg/R6mG2JKNxt">Discord</a>.
+        <a
+          (click)="click('https://discord.gg/R6mG2JKNxt', 'Discord')"
+          href="https://discord.gg/R6mG2JKNxt"
+          >Discord</a
+        >.
       </p>
     </div>
   </div>
   <div class="row break"></div>
   <div class="row justify-content-center pb-5">
-    <a
-      (click)='click("https://drive.google.com/drive/folders/1ODhCZ9lkEIsRqv0teSUHLh8aNq6pdrW_?usp=sharing","OPORDs")'
-      href="https://drive.google.com/drive/folders/1ODhCZ9lkEIsRqv0teSUHLh8aNq6pdrW_?usp=sharing"
-      target="_blank"
-    >
-      <h2>Access our public OPORDs.</h2>
-    </a>
-    <div class="w-100"></div>
     <h2>
       <a
-        (click)='click("https://steamcommunity.com/sharedfiles/filedetails/?id=2208930462","Modlist View")'
-        href="https://steamcommunity.com/sharedfiles/filedetails/?id=2208930462"
+        (click)="
+          click(
+            'https://steamcommunity.com/sharedfiles/filedetails/?id=2449686446',
+            'Modlist View'
+          )
+        "
+        href="https://steamcommunity.com/sharedfiles/filedetails/?id=2449686446"
         target="_blank"
         >View</a
-      >/<a 
-        (click)='click("../../assets/Modlits.html","Modlist Download")'
-        target="_blank" href="../../assets/Modlist.html" download="61st_Modlist.html"
-        >Download</a
       >
-      our required modlist.
+      our modlist.
     </h2>
-    <div class="w-100"></div>
-    <a
-      (click)='click("https://steamcommunity.com/sharedfiles/filedetails/?id=2120718749","Whitelist")'
-      href="https://steamcommunity.com/sharedfiles/filedetails/?id=2120718749"
-      target="_blank"
-    >
-      <h2>View our whitelisted mods.</h2>
-    </a>
   </div>
   <div class="row justify-content-center bot">
     <p>
       For more information about the unit and our operations please refer to the
       rest of the website or our
-      <a (click)='click("https://discord.gg/R6mG2JKNxt","Discord")' target="_blank" href="https://discord.gg/R6mG2JKNxt">discord</a>!
+      <a
+        (click)="click('https://discord.gg/R6mG2JKNxt', 'Discord')"
+        target="_blank"
+        href="https://discord.gg/R6mG2JKNxt"
+        >discord</a
+      >!
     </p>
   </div>
-
-<!-- Modal -->
-<div class="modal fade" id="changeImg" tabindex="-1" aria-labelledby="changeImgLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="changeImgLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>
-          Something about changing images
-        </p>
-        <input type="file" name="" id="file-selector" accept=".jpg" (change)="fileSelector($event)" >
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save" (click)="uploadFile($event)">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 </div>

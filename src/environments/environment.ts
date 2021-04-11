@@ -15,7 +15,9 @@ export const environment = {
     appId: '1:765869067733:web:cbce02f878c9434c42415c',
     measurementId: 'G-9NG0TCMS22',
   },
-  useEmulators: true,
+  useEmulators: false,
+  // cdn: 'https://cdn.61st-regiment.com/',
+  cdn: 'http://127.0.0.1:5006/',
 }
 
 /*

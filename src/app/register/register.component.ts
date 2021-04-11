@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser'
 import { ConfirmedValidator } from '../confirmed.validator'
 import { passwordValidator } from '../directive/password.directive'
 import { AuthService } from '../services/auth/auth.service'
+import { CdnService } from '../services/cdn.service'
 
 @Component({
   templateUrl: './register.component.html',
@@ -20,26 +21,29 @@ export class RegisterComponent implements OnInit {
     private auth: AuthService,
     private _fb: FormBuilder,
     private _title: Title,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public CDN: CdnService
   ) {
-    _title.setTitle('Register - 61st Calvalry Regiment')
+    this._title.setTitle('Register - 61st Calvalry Regiment')
   }
 
   ngOnInit(): void {
     this.passwordForm = this._fb.group(
       {
-        password: ['password', [Validators.required]],
-        passwordRepeat: ['password', [Validators.required]],
+        password: ['', [Validators.required]],
+        passwordRepeat: ['', [Validators.required]],
       },
-      { validator: ConfirmedValidator('password', 'passwordRepeat') }
+      {
+        validator: ConfirmedValidator('password', 'passwordRepeat'),
+      }
     )
     this.registerForm = this._fb.group({
-      email: ['hi@hi.com', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       password: this.passwordForm,
-      firstInitial: ['x', [Validators.maxLength(1)]],
-      lastName: ['dover'],
-      nickName: ['Thunder'],
-      code: ['123456'],
+      firstInitial: ['', [Validators.maxLength(1)]],
+      lastName: [''],
+      nickName: [''],
+      code: ['', [Validators.pattern(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)]],
     })
     this.registerForm.valueChanges.subscribe(() => (this.errorMessage = ''))
   }
@@ -100,13 +104,24 @@ export class RegisterComponent implements OnInit {
 
   get firstInitialErrorMessage() {
     const control = this.name.firstInitial
-    console.log(Object.keys(control.errors)[0])
-
     switch (Object.keys(control.errors)[0]) {
       case 'maxlength':
         return 'First inital should be one character.'
       case 'required':
         return 'Please provide a first inital.'
+      default:
+        return ''
+    }
+  }
+
+  get codeErrorMessage() {
+    const control = this.code
+    console.log(Object.keys(control.errors)[0])
+    switch (Object.keys(control.errors)[0]) {
+      case 'pattern':
+        return 'Code does not match required pattern.'
+      case 'required':
+        return 'Please provide a code.'
       default:
         return ''
     }
@@ -121,34 +136,60 @@ export class RegisterComponent implements OnInit {
     formValue.firstInitial = formValue.firstInitial.toUpperCase()
     formValue.lastName = formValue.lastName.capitalize()
     const callable = this._fnc.httpsCallable('combineName')
-    callable({
+    let name = await callable({
       name: {
         firstInital: formValue.firstInitial,
         lastName: formValue.lastName,
         nickName: formValue.nickName,
       },
-    }).subscribe((res) => {
-      try {
-        this.auth.register(
-          formValue.email,
-          formValue.password.password,
-          formValue.code,
-          {
-            firstInital: formValue.firstInitial,
-            lastName: formValue.lastName,
-            nickName: formValue.nickName,
-            displayName: res.displayName,
-          }
-        )
-      } catch (err) {
-        let errorCode = err.code
-        let errorMessage = err.message
-        console.error(errorCode, errorMessage)
-        this._snackBar.open(errorMessage, 'Close', {
-          duration: 5000,
-        })
-      }
-    })
+    }).toPromise()
+    try {
+      await this.auth.register(
+        formValue.email,
+        formValue.password.password,
+        formValue.code,
+        {
+          firstInital: formValue.firstInitial,
+          lastName: formValue.lastName,
+          nickName: formValue.nickName,
+          displayName: name.displayName,
+        }
+      )
+    } catch (err) {
+      console.error(err)
+      this._snackBar.open(err, 'Close', {
+        duration: 5000,
+      })
+    }
+
+    //   callable({
+    //     name: {
+    //       firstInital: formValue.firstInitial,
+    //       lastName: formValue.lastName,
+    //       nickName: formValue.nickName,
+    //     },
+    //   }).subscribe((res) => {
+    //     try {
+    //       this.auth.register(
+    //         formValue.email,
+    //         formValue.password.password,
+    //         formValue.code,
+    //         {
+    //           firstInital: formValue.firstInitial,
+    //           lastName: formValue.lastName,
+    //           nickName: formValue.nickName,
+    //           displayName: res.displayName,
+    //         }
+    //       )
+    //     } catch (err) {
+    //       let errorCode = err.code
+    //       let errorMessage = err.message
+    //       console.error(errorCode, errorMessage)
+    //       this._snackBar.open(errorMessage, 'Close', {
+    //         duration: 5000,
+    //       })
+    //     }
+    //   })
   }
 }
 
