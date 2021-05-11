@@ -45,12 +45,7 @@ export class AuthService {
     email: string,
     password: string,
     code: string,
-    name: {
-      firstInital: string
-      lastName: string
-      nickName: string
-      displayName: string
-    }
+    nickName: string
   ) {
     code = code.toLowerCase()
     let codeDoc = await this.fireStore
@@ -67,10 +62,8 @@ export class AuthService {
       )
       const data$: User = {
         uid: user.user.uid,
-        firstInitial: name.firstInital,
-        lastName: name.lastName,
-        userName: name.nickName,
-        displayName: name.displayName,
+        userName: nickName,
+        displayName: nickName,
         roles: codeDoc.get('access'),
       }
       console.log('data', data$)
@@ -97,10 +90,8 @@ export class AuthService {
                 console.log(email, password, code, name)
                 const data$: User = {
                   uid: user.user.uid,
-                  firstInitial: name.firstInital,
-                  lastName: name.lastName,
-                  userName: name.nickName,
-                  displayName: name.displayName,
+                  userName: nickName,
+                  displayName: nickName,
                   roles: doc.access,
                 }
                 // console.log('user object', data$)
@@ -126,7 +117,7 @@ export class AuthService {
         .doc<Code>(code)
         .set({
           code: code,
-          createdBy: `${user.firstInitial}.${user.lastName} "${user.userName}"`,
+          createdBy: `${user.userName}`,
           access: access,
         })
     })

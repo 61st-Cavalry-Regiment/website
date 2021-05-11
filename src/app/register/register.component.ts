@@ -40,8 +40,6 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: this.passwordForm,
-      firstInitial: ['', [Validators.maxLength(1)]],
-      lastName: [''],
       nickName: [''],
       code: ['', [Validators.pattern(/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/)]],
     })
@@ -102,18 +100,6 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  get firstInitialErrorMessage() {
-    const control = this.name.firstInitial
-    switch (Object.keys(control.errors)[0]) {
-      case 'maxlength':
-        return 'First inital should be one character.'
-      case 'required':
-        return 'Please provide a first inital.'
-      default:
-        return ''
-    }
-  }
-
   get codeErrorMessage() {
     const control = this.code
     console.log(Object.keys(control.errors)[0])
@@ -133,27 +119,12 @@ export class RegisterComponent implements OnInit {
 
   async submitHandler() {
     const formValue: formValue = this.registerForm.value
-    formValue.firstInitial = formValue.firstInitial.toUpperCase()
-    formValue.lastName = formValue.lastName.capitalize()
-    const callable = this._fnc.httpsCallable('combineName')
-    let name = await callable({
-      name: {
-        firstInital: formValue.firstInitial,
-        lastName: formValue.lastName,
-        nickName: formValue.nickName,
-      },
-    }).toPromise()
     try {
       await this.auth.register(
         formValue.email,
         formValue.password.password,
         formValue.code,
-        {
-          firstInital: formValue.firstInitial,
-          lastName: formValue.lastName,
-          nickName: formValue.nickName,
-          displayName: name.displayName,
-        }
+        formValue.nickName
       )
     } catch (err) {
       console.error(err)
@@ -199,7 +170,5 @@ interface formValue {
     password: string
   }
   code: string
-  firstInitial: string
-  lastName: string
   nickName: string
 }

@@ -29,20 +29,6 @@ export class MainComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    $('#changeImg').on('show.bs.modal', function (event) {
-      var images: Map<string, string> = new Map([
-        ['img_1', 'Image 1'],
-        ['img_2', 'Image 2'],
-      ])
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var image = button.data('whatever') // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-      var modal = $(this)
-
-      modal.find('.modal-title').text('Change image for ' + images.get(image))
-      modal.find('#save').data('whatever', image)
-    })
     this.isLoggedIn = this.auth.isLoggedIn
     // this.changeImg('img1', 'test/')
   }
@@ -68,7 +54,7 @@ export class MainComponent implements OnInit {
       },
     }
     this.auth.user$.subscribe((user) => {
-      meta.customMetadata.author = `${user.firstInitial}.${user.lastName}`
+      meta.customMetadata.author = `${user.userName}`
     })
     console.log(this.imgPending)
     const image = $(event.target).data('whatever')

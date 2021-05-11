@@ -72,30 +72,6 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <mat-form-field class="w-50 pb-1">
-              <input
-                matInput
-                required
-                placeholder="First Initial"
-                formControlName="firstInitial"
-              />
-              <mat-error
-                *ngIf="name.firstInitial.invalid && name.firstInitial.touched"
-              >
-                {{ firstInitialErrorMessage }}
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field class="w-50 ps-1 pb-1">
-              <input
-                matInput
-                required
-                placeholder="Last Name"
-                formControlName="lastName"
-              />
-              <mat-error *ngIf="name.lastName.invalid && name.lastName.touched">
-                Please provide a last name.
-              </mat-error>
-            </mat-form-field>
             <mat-form-field class="w-100 pb-1">
               <input
                 matInput
