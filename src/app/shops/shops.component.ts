@@ -92,7 +92,7 @@ export class ShopsComponent implements OnInit {
       },
     }
     this.auth.user$.subscribe((user) => {
-      meta.customMetadata.author = `${user.firstInitial}.${user.lastName}`
+      meta.customMetadata.author = `${user.userName}`
     })
     console.log(this.imgPending)
     const image = $(event.target).data('image')
