@@ -24,34 +24,6 @@
       ]
     },
     {
-      "target": "test",
-      "public": "dist/Calvalry-Regiment-Website",
-      "ignore": [
-        "**/.*"
-      ],
-      "appAssociation": "AUTO",
-      "headers": [{
-        "source": "*.[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].+(css|js)",
-        "headers": [{
-          "key": "Cache-Control",
-          "value": "public,max-age=31536000,immutable"
-        }]
-      }],
-      "rewrites": [{
-          "source": "/cdn/image/**",
-          "function": "imageTransform"
-        },
-        {
-          "source": "**",
-          "destination": "/index.html"
-        },
-        {
-          "source": "/link/**",
-          "dynamicLinks": true
-        }
-      ]
-    },
-    {
       "target": "cdn",
       "public": "dist/cdn",
       "ignore": [
